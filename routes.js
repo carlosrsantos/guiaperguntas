@@ -1,9 +1,10 @@
 const express = require('express');
 const Pergunta = require('./models/Pergunta');
+const Resposta = require('./models/Resposta');
 
 const route = express();
 
-
+//Rotas para pergunta
 route.get("/", (req, res) => {
     Pergunta.findAll({ raw: true, order:[
         ['createdAt','DESC']
@@ -22,11 +23,20 @@ route.get("/perguntar", (req, res) => {
 route.get("/pergunta/:id", (req, res)=>{
     var id = req.params.id;
     Pergunta.findOne({ 
-        where:{id}
+        where:{id:id}
     }).then(pergunta => {
         if(pergunta != undefined){
-            res.render("/pergunta");
-        }else{
+            
+            Resposta.findAll({
+                where: { perguntaId: pergunta.id },
+                order:[
+                    ['id', 'DESC']
+                ]}).then(respostas => {
+                res.render("pergunta", { 
+                    pergunta: pergunta,
+                    respostas: respostas });
+            });           
+        }else{ //Não encontrada
             res.redirect("/");
         }
     });
@@ -36,11 +46,23 @@ route.post("/salvarpergunta", (req, res) => {
     var titulo = req.body.titulo;
     var descricao = req.body.descricao;
     Pergunta.create({
-        titulo,
-        descricao
+        titulo:titulo,
+        descricao:descricao
     }).then(()=>{
         res.redirect("/");
-    })
+    });
+});
+
+//Rotas para Resposta
+route.post("/responder",(req, res)=>{
+    var corpo = req.body.corpo;
+    var perguntaId = req.body.pergunta;
+    Resposta.create({
+        corpo:corpo,
+        perguntaId:perguntaId
+    }).then(()=>{
+        res.redirect(`/pergunta/${perguntaId}`);
+    });
 });
 
 module.exports = route;
