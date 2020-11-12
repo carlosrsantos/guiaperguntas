@@ -14,7 +14,7 @@
             <textarea placeholder="Digite sua resposta" class="form-control" name="corpo"></textarea>
             <br>
             <input type="hidden" name="pergunta" value="<%= pergunta.id %>">
-            <button type="submit" class="btn btn-primary">Responder</button>
+            <button type="submit" class="btn btn-primary" name="botao" onclick="">Responder</button>
         </form>
         <hr>
         <h3>Respostas</h3>
@@ -31,4 +31,18 @@
     </div>
 
 </body>
+<script>  
+
+    var corpo = document.querySelector('textarea[name=corpo]');
+    var botao = document.querySelector('button[name=botao]');
+
+    botao.onclick = function() {
+          if( corpo.value == ""){
+            alert("Sua resposta não pode ser vazia!");
+            corpo.focus();
+            return false;
+          }
+    }
+
+</script>
 <%- include('partials/footer.ejs') %>

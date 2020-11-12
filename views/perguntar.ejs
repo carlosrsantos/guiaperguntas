@@ -16,7 +16,7 @@
                     <br>
                     <textarea name="descricao" placeholder="Descreva sua pergunta aqui" class="form-control"></textarea>
                     <br>
-                    <button type="submit" class="btn btn-primary">Perguntar</button>      
+                    <button type="submit" class="btn btn-primary" name="botao">Perguntar</button>      
                 </form>
               </div>
         </div>
@@ -24,4 +24,22 @@
     </div>
 
 </body>
+<script>  
+
+    var titulo = document.querySelector('input[name=titulo]');
+    var descricao = document.querySelector('textarea[name=descricao]');
+    var botao = document.querySelector('button[name=botao]');
+
+    botao.onclick = function() {
+          if( titulo.value == "" || descricao.value == ""){
+            alert("Preencha todos os campos corretamente");
+            if(titulo.value == "")
+              titulo.focus();
+            if(descricao.value == "")
+              descricao.focus();
+            return false;
+          }
+    }
+</script>
+
 <%- include('partials/footer.ejs') %>
